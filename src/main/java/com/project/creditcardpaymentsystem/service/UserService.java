@@ -1,14 +1,13 @@
 package com.project.creditcardpaymentsystem.service;
 
 import com.project.creditcardpaymentsystem.entity.User;
-import com.project.creditcardpaymentsystem.repository.CustomerRepository;
 import com.project.creditcardpaymentsystem.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -22,19 +21,25 @@ public class UserService {
     @Autowired
     private EmailService emailService;
 
-    private static final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public List<User> findAllUsers() {
         return userRepository.findAll();
     }
 
-    public void saveUser (User user) {
-        user.setPassword(passwordEncoder.encode(user.getPassword())); // Encrypt password
-        user.setRoles(List.of("USER"));
+    public void saveUser(User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        // Handle immutable/empty roles configuration
+        if (user.getRoles() == null || user.getRoles().isEmpty()) {
+            List<String> userRoles = new ArrayList<>();
+            userRoles.add("USER");
+            user.setRoles(userRoles);
+        }
         userRepository.save(user);
     }
 
-    public void saveNewUser (User user) {
+    public void saveNewUser(User user) {
         userRepository.save(user);
     }
 
@@ -63,11 +68,6 @@ public class UserService {
             user.setResetTokenExpiration(LocalDateTime.now().plusHours(1)); // Token valid for 1 hour
             // Save the user with the new token and expiration
             saveNewUser(user);
-            // Log the generated token and expiration for debugging
-            System.out.println("Generated Token: " + token);
-            System.out.println("Token Expiration: " + user.getResetTokenExpiration());
-
-            // Return the generated token
             return token;
         }
         // Return null if the user is not found
@@ -94,8 +94,9 @@ public class UserService {
                     "Your new password is: " + newPassword + "\n\n" +
                     "If you did not request this change, please contact support.";
 
-            // Assuming you have access to the email service
-            emailService.sendTransactionNotification(user.getCustomers().get(0).getEmail(), subject, body);
+            if (user.getCustomers() != null && !user.getCustomers().isEmpty()) {
+                emailService.sendTransactionNotification(user.getCustomers().get(0).getEmail(), subject, body);
+            }
         }
     }
 }
