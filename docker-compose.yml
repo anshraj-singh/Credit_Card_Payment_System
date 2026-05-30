@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  credit-card-backend:
+    build: .
+    container_name: credit-card-app
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env
+    environment:
+      # Inject configurations from local .env context environment variables
+      - MONGO_URI=${MONGO_URI}
+      - MAIL_USERNAME=${MAIL_USERNAME}
+      - MAIL_PASSWORD=${MAIL_PASSWORD}
+      - STRIPE_API_KEY=${STRIPE_API_KEY}
+      - STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY}
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY}
+    restart: always
