@@ -29,7 +29,13 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/auth/**").permitAll() // Public auth endpoints
+                // Permit public authentication endpoints
+                .antMatchers("/auth/**").permitAll()
+
+                // Permit Swagger UI / OpenAPI assets explicitly
+                .antMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
+
+                // Role-Based endpoint lockdowns
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 .antMatchers("/reports/**").hasRole("ADMIN")
                 .antMatchers("/Users/me", "/Users/update-user", "/customers/**", "/credit-cards/**", "/transactions/**").authenticated()

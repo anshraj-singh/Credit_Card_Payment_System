@@ -7,6 +7,11 @@ import com.project.creditcardpaymentsystem.service.CustomerService;
 import com.project.creditcardpaymentsystem.service.EmailService;
 import com.project.creditcardpaymentsystem.service.TransactionService;
 import com.project.creditcardpaymentsystem.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,14 +25,14 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/customers")
+@Tag(name = "Customer Ledger Profiles", description = "Operations tracking metadata parameters, links, and transactional aggregations contextualized to clients accounts entities frameworks.")
 public class CustomerController {
 
     @Autowired
     private CustomerService customerService;
 
     @Autowired
-    private UserService userService; // Add UserService to update User
-
+    private UserService userService;
     @Autowired
     private EmailService emailService;
 
@@ -35,7 +40,14 @@ public class CustomerController {
     private TransactionService transactionService;
 
     @PostMapping
-    public ResponseEntity<?> createCustomer(@RequestBody Customer myCustomer) {
+    @Operation(summary = "Onboard individual client database accounts entities files", tags = {"Customer Ledger Profiles"})
+    public ResponseEntity<?> createCustomer(
+            @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    description = "Customer identity entry core specification template tracking arrays data definition mappings models.",
+                    required = true,
+                    content = @Content(schema = @Schema(implementation = Customer.class), examples = @ExampleObject(value = "{\n  \"name\": \"Ansh Raj Singh\",\n  \"email\": \"ansh@example.com\",\n  \"phone\": \"+919876543210\",\n  \"address\": \"Gwalior, Madhya Pradesh, India\"\n}"))
+            )
+            @RequestBody Customer myCustomer) {
         try {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             String userName = authentication.getName();
@@ -46,13 +58,12 @@ public class CustomerController {
             String subject = "Welcome to the Credit Card Payment System";
             String body = "Dear " + myCustomer.getName() + ",\n\n" +
                     "Your account has been successfully created.\n" +
-                    "Username: " + user.getUsername() + "\n" +
-                    "Password: " + user.getPassword() + "\n\n" +
+                    "Username: " + user.getUsername() + "\n\n" +
                     "Thank you for joining us!\n" +
                     "Best regards,\n" +
                     "Credit Card Payment System Team";
 
-            emailService.sendTransactionNotification(myCustomer.getEmail(),subject, body);
+            emailService.sendTransactionNotification(myCustomer.getEmail(), subject, body);
             User updateUser = userService.findByUsername(userName);
             return new ResponseEntity<>(updateUser, HttpStatus.CREATED);
         } catch (Exception e) {
@@ -61,6 +72,7 @@ public class CustomerController {
     }
 
     @GetMapping("id/{myId}")
+    @Operation(summary = "Query customer fields profile metrics records values configurations", tags = {"Customer Ledger Profiles"})
     public ResponseEntity<Customer> getCustomerById(@PathVariable String myId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String userName = authentication.getName();
@@ -74,7 +86,15 @@ public class CustomerController {
     }
 
     @PutMapping("id/{myId}")
-    public ResponseEntity<Customer> updateCustomer(@PathVariable String myId, @RequestBody Customer updatedCustomer) {
+    @Operation(summary = "Mutate metadata attributes parameter configurations structural mappings context datasets parameters logs definitions", tags = {"Customer Ledger Profiles"})
+    public ResponseEntity<Customer> updateCustomer(
+            @PathVariable String myId,
+            @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    description = "Target entry payload updates schemas parameters mappings profiles specifications variables data wrappers.",
+                    required = true,
+                    content = @Content(examples = @ExampleObject(value = "{\n  \"phone\": \"+919999999999\",\n  \"address\": \"New Delhi, India\"\n}"))
+            )
+            @RequestBody Customer updatedCustomer) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String userName = authentication.getName();
         User user = userService.findByUsername(userName);
@@ -101,6 +121,7 @@ public class CustomerController {
     }
 
     @DeleteMapping("id/{myId}")
+    @Operation(summary = "Purge customer identity entities links records records values structural parameters settings", tags = {"Customer Ledger Profiles"})
     public ResponseEntity<?> deleteCustomer(@PathVariable String myId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String userName = authentication.getName();
@@ -110,7 +131,8 @@ public class CustomerController {
 
     // New endpoint to get all transactions for the authenticated user's customers
     @GetMapping("/transactions")
-    public ResponseEntity<?> getAllTransactionsForAuthenticatedUser () {
+    @Operation(summary = "Compile user transactions metrics graphs data structural values summaries collections context mappings logs", tags = {"Customer Ledger Profiles"})
+    public ResponseEntity<?> getAllTransactionsForAuthenticatedUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String userName = authentication.getName();
         User user = userService.findByUsername(userName);
