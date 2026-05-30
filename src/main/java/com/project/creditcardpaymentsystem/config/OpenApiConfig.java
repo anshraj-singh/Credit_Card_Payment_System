@@ -27,7 +27,7 @@ public class OpenApiConfig {
 
         // Live Railway Production Server Configuration
         Server productionServer = new Server()
-                .url("https://credit-card-payment-system-production.up.railway.app")
+                .url("https://creditcardpaymentsystem-production.up.railway.app")
                 .description("Production Environment (Railway Cloud)");
 
         return new OpenAPI()
