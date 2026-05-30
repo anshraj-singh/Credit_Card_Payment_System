@@ -20,13 +20,15 @@ public class OpenApiConfig {
     public OpenAPI customOpenAPI() {
         final String securitySchemeName = "bearerAuth";
 
+        //Local Development Server Configuration
         Server localServer = new Server()
                 .url("http://localhost:8080")
                 .description("Development Server (Localhost)");
 
+        // Live Railway Production Server Configuration
         Server productionServer = new Server()
-                .url("https://credit-card-payment-system.onrender.com")
-                .description("Production Environment (Render Cloud)");
+                .url("https://credit-card-payment-system-production.up.railway.app")
+                .description("Production Environment (Railway Cloud)");
 
         return new OpenAPI()
                 .servers(Arrays.asList(localServer, productionServer))
