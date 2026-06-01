@@ -996,7 +996,10 @@ Best regards, Credit Card Payment System Team
 "reason": "Lost",
 "requestDate": "2023-10-01T12:00:00",
 "status": "PENDING"
-},
+}
+```
+
+```json
 {
 "id": "2",
 "cardId": "6543210987654321",
