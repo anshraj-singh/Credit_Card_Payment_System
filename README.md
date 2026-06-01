@@ -1,4 +1,23 @@
-# Credit Card Payment System
+# 💳 Credit Card Payment System
+
+An enterprise-grade, high-performance RESTful API infrastructure engine built with Spring Boot, secured via stateless JWT protocols, and fully containerized with Docker for seamless cloud orchestrations.
+
+![Java Version](https://img.shields.io/badge/Java-17-orange?style=for-the-badge&logo=openjdk)
+![Spring Boot](https://img.shields.io/badge/Spring%20Boot-2.7.x-brightgreen?style=for-the-badge&logo=springboot)
+![MongoDB](https://img.shields.io/badge/MongoDB-Atlas-green?style=for-the-badge&logo=mongodb)
+![Docker](https://img.shields.io/badge/Docker-Ready-blue?style=for-the-badge&logo=docker)
+![Authentication](https://img.shields.io/badge/Auth-JWT%20Stateless-red?style=for-the-badge&logo=jsonwebtokens)
+[![Spring Security](https://img.shields.io/badge/Spring_Security-✓-brightgreen?style=for-the-badge&logo=springsecurity)](https://spring.io/projects/spring-security)
+[![License](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)](LICENSE)
+---
+
+### 🌐 Live Deployment
+
+The platform services are fully live: 
+
+* 🚀 **Explore Live API Documentation:** [Live URL](https://creditcardpaymentsystem-production.up.railway.app/swagger-ui/index.html)
+
+---
 
 ## Overview
 This project is a `Spring Boot` application designed to handle operations related to a credit card payment system. It uses a `MongoDB` database for data persistence and provides RESTful APIs for managing users, customers, credit cards, and transactions.
@@ -1031,3 +1050,24 @@ To utilize the AI features, send a POST request to the `/ai/generate-content` en
     "response": "Using a credit card can offer several benefits, including rewards points, cash back, and the ability to build credit history."
 }
 ```
+
+### 1. 🔍 Interactive API Documentation (Swagger)
+The project now integrates **OpenAPI 3.0 (Swagger)**. This allows developers to visualize and interact with the API’s resources without having any of the implementation logic in place.
+* **Swagger UI URL:** `http://localhost:8080/swagger-ui.html`
+* **Features:**
+    * One-click API testing.
+    * Standardized Request/Response schemas.
+    * Built-in **JWT Bearer Token** support for protected endpoints.
+
+### 2. 🐳 Docker Implementation
+The entire application is now containerized, ensuring it runs exactly the same on your local machine, staging, and production (Render).
+* **Multi-Stage Build:** Optimized Docker image size using `eclipse-temurin:17-jdk-alpine`.
+* **Docker Compose:** Orchestrates the application with environment-specific configurations.
+
+**To run the project via Docker:**
+```powershell
+# 1. Build the JAR
+./mvnw clean package -DskipTests
+
+# 2. Spin up the container
+docker-compose up --build -d
